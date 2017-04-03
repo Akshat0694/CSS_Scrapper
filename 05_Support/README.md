@@ -1,12 +1,9 @@
-# CSS_Scrapper
+**Remove this file when something is uploaded to this directory.**
 
 # H1
 ## H2
 ### H3
 #### H4
-
-**Example**
-
 
 Examples for markdown file:
 ```javascript
