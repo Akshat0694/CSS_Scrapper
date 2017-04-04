@@ -9,4 +9,4 @@ conducted at Faculty of Mechanical Engineering, Czech Technical University.
 In addition to scrapping the data from the University servers where the students
 upload the answers to the test, it also runs a plagiarism check on each file.
 
-The detailed Plan can be found in [here](Testructor-Lite/01_Designs/Akshat_zadaniBP.doc "Original Assignment").
+The detailed Plan can be found in [here](https://github.com/Akshat0694/Testructor-Lite/blob/master/01_Designs/Akshat_zadaniBP.doc "Original Assignment").
