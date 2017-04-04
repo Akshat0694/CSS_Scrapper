@@ -1,30 +1,12 @@
-# CSS_Scrapper
-
-# H1
-## H2
-### H3
-#### H4
-
-**Example**
+# Testructor Lite
 
 
-Examples for markdown file:
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
-```
+This python script is written in Python as part of the project work conducted
+at Czech technical University. The main purpose of the project is to automate
+the reviewing of student's tests at the Computer Support for Studies examination,
+conducted at Faculty of Mechanical Engineering, Czech Technical University.
 
-***
+In addition to scrapping the data from the University servers where the students
+upload the answers to the test, it also runs a plagiarism check on each file.
 
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-
----
-
-Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-
-___
-
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
-" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+The detailed Plan can be found in [here](Testructor-Lite/01_Designs/Akshat_zadaniBP.doc "Original Assignment").
