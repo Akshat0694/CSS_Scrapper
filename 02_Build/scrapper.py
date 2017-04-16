@@ -1,12 +1,15 @@
 from __future__ import print_function
 import requests
+import os
+import easygui
+import logging
 
 
 def file_download(file_url):
-    """
+    """Downloads file from the server
 
-    :param file_url:
-    :return:
+    :param file_url: url to the file to be downloaded
+    :return: Either the downloaded file or False
     """
     local_filename = file_url.split('/')[-1]
     r = requests.get(file_url, stream=True)
@@ -20,17 +23,44 @@ def file_download(file_url):
         pass
     return False
 
-tasks_folders = ["Task1"]
-test_takers = ["tandoaks"]
+
+def test_takers():
+    """Create a list of test takers from a txt file
+
+    :return: List with usernames of test takers
+    """
+    try:
+        # easygui.fileopenbox(msg=None, title=None, default='*', filetypes=None, multiple=False)
+        msg = "Choose a text file with test taker's usernames on separate lines."
+        title = "Choose a .txt file"
+        file_name = easygui.fileopenbox(msg=msg, title=title, filetypes=["*.txt"])
+        open_file = open(file_name, "r")
+        test_takers_list = open_file.readlines()
+        if open_file:
+            open_file.close()
+        return test_takers_list
+    except Exception as e:
+        print(e.message)
+        raise
 
 
 def main():
-    for test_taker in test_takers:
-        for tasks_folder in tasks_folders:
-            fileUrl = "http://users.fs.cvut.cz/~" + test_taker + "/test.docx"
-            # fileUrl = "http://users.fs.cvut.cz/~" + test_taker + "/"+ tasks_folders "/test.docx"
-            test = file_download(fileUrl)
-            if file_download(fileUrl) is False:
-                print("Error while downloading files from server.")
+    tasks_folders = ["Task1"]
+    test_takers_list = test_takers()
+    print(test_takers_list)
+    print(" ___________" + "__________________________________________")
+    print("| Test Taker " + "|                  Status                |")
+    for test_taker in test_takers_list:
+        fileurl = "http://users.fs.cvut.cz/~" + test_taker + "/test.docx"
+        if file_download(fileurl):
+            for tasks_folder in tasks_folders:
+                # fileUrl = "http://users.fs.cvut.cz/~" + test_taker + "/"+ tasks_folders "/test.docx"
+                test = file_download(fileurl)
+                print("|  " + test_taker + "  |      Files successfully downloaded     |")
+        else:
+            print("|  " + test_taker + "  |Error while downloading files from server|")
 
 
+if __name__ == "__main__":
+    main()
+    # pass
