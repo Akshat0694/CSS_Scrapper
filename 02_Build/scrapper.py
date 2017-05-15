@@ -21,7 +21,6 @@ def file_fldr_exists(file_url):
     :param file_url: url to the file to be downloaded
     :return: True or False
     """
-    local_filename = file_url.split('/')[-1]
     r = requests.get(file_url, stream=True)
     if r.status_code == 200:
         return True

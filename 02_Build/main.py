@@ -45,7 +45,7 @@ def main():
                             os.rename(tasks_folder, tasks_folder + ".html")
                             existing_files = filenames_from_html(os.path.join(os.getcwd(), tasks_folder + ".html"))
                             os.remove(os.path.join(os.getcwd(), tasks_folder + ".html"))
-
+                            print (existing_files)
                             if len(existing_files) > 0:
                                 for file_name in existing_files:
                                     file_url = folder_url + "/" + file_name
