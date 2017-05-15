@@ -1,8 +1,9 @@
 from __future__ import absolute_import
 from unittest import TestCase
-from scrapper import file_download
+from .scrapper import file_download
 # import os.path
 import os
+
 
 class TestDocxFileDownload(TestCase):
     """
@@ -15,8 +16,9 @@ class TestDocxFileDownload(TestCase):
     BASE_DIR = os.getcwd()
 
     def test(self):
+        base_dir = os.getcwd()
         if os.path.isfile("test.docx"):
-            os.remove(os.path.join(BASE_DIR, "test.docx"))
+            os.remove(os.path.join(base_dir, "test.docx"))
         else:
             file_download("http://users.fs.cvut.cz/~tandoaks/test.docx")
             self.assertIs(True, os.path.isfile("test.docx"))
