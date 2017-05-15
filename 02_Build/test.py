@@ -1,8 +1,9 @@
 from __future__ import absolute_import
 from unittest import TestCase
-from .scrapper import file_download
+from .scrapper import file_download, filenames_from_html, move_file
 # import os.path
 import os
+import shutil
 
 
 class TestDocxFileDownload(TestCase):
@@ -22,3 +23,15 @@ class TestDocxFileDownload(TestCase):
         else:
             file_download("http://users.fs.cvut.cz/~tandoaks/test.docx")
             self.assertIs(True, os.path.isfile("test.docx"))
+
+
+class TestFilenamesFromHTML(TestCase):
+
+    def test(self):
+        file_download("http://users.fs.cvut.cz/~tandoaks/Task1")
+        src_path = os.path.join(os.getcwd(), "Task1.html")
+        shutil.move(os.path.join(os.getcwd(), "Task1"), src_path)
+        existing_files = filenames_from_html(src_path)
+        os.remove(src_path)
+        self.assertIs(True, "test.docx" in existing_files)
+

@@ -3,6 +3,7 @@ import requests
 import easygui
 import shutil
 import os
+from bs4 import BeautifulSoup
 
 
 def dialog_box(msg, title):
@@ -14,7 +15,7 @@ def move_file(filename, test_taker, task_folder, dest_fldr_root):
                 os.path.join(dest_fldr_root, test_taker, task_folder, filename))
 
 
-def file_exists(file_url):
+def file_fldr_exists(file_url):
     """Checks if the file exists
 
     :param file_url: url to the file to be downloaded
@@ -28,6 +29,7 @@ def file_exists(file_url):
 
 
 def file_download(file_url):
+    # type: (object) -> object
     """Downloads file from the server
 
     :param file_url: url to the file to be downloaded
@@ -43,7 +45,7 @@ def file_download(file_url):
                     f.flush()
         return local_filename
         pass
-    return False
+    return 0
 
 
 def test_takers():
@@ -68,11 +70,24 @@ def test_takers():
 
     except Exception as e:
         if file_name is None:
-            dialog_box("No text file with usernames selected!")
+            dialog_box("No text file with usernames selected!" + "\n" + "Script exited", "Error")
             raise SystemExit("No text file with usernames selected!")
         else:
-            dialog_box(e.message)
+            dialog_box(e.message, "Error")
             raise
 
 
+def filenames_from_html(src_path):
+    """Check for the files in the Task folder
+
+    :return: List of full file name
+    """
+    with open(src_path) as fp:
+        soup = BeautifulSoup(fp, "html.parser")
+        existing_files = [link.get('href') for link in soup.findAll('a', href=True) if "." in link['href']]
+
+        # for link in soup.findAll('a', href=True):
+        #     if "." in link['href']:
+        #         existing_files += link['href']
+        return existing_files
 
