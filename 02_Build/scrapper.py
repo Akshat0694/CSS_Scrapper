@@ -1,6 +1,30 @@
 from __future__ import print_function
 import requests
 import easygui
+import shutil
+import os
+
+
+def dialog_box(msg, title):
+    easygui.msgbox(msg, title)
+
+
+def move_file(filename, test_taker, task_folder, dest_fldr_root):
+    shutil.move(os.path.join(os.getcwd(), filename),
+                os.path.join(dest_fldr_root, test_taker, task_folder, filename))
+
+
+def file_exists(file_url):
+    """Checks if the file exists
+
+    :param file_url: url to the file to be downloaded
+    :return: True or False
+    """
+    local_filename = file_url.split('/')[-1]
+    r = requests.get(file_url, stream=True)
+    if r.status_code == 200:
+        return True
+    return False
 
 
 def file_download(file_url):
@@ -44,7 +68,11 @@ def test_takers():
 
     except Exception as e:
         if file_name is None:
-            print("No text file with usernames selected!")
+            dialog_box("No text file with usernames selected!")
+            raise SystemExit("No text file with usernames selected!")
         else:
-            print(e.message)
+            dialog_box(e.message)
             raise
+
+
+
