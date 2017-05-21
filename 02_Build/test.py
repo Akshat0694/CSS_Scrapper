@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from unittest import TestCase
-from .scrapper import file_download, filenames_from_html, move_file
+from .scrapper import file_download, filenames_from_html
+from .plagiarism import *
 # import os.path
 import os
 import shutil
@@ -35,3 +36,14 @@ class TestFilenamesFromHTML(TestCase):
         os.remove(src_path)
         self.assertIs(True, "test.docx" in existing_files)
 
+
+class TestRetrieveFolderContent(TestCase):
+
+    def test(self):
+        src_path = os.getcwd()
+        folder_to_search = os.path.join(src_path, "Test")
+        if not os.path.exists(folder_to_search):
+            os.mkdir(folder_to_search)
+        contents = retrieve_folder_content(src_path)
+        os.rmdir(folder_to_search)
+        self.assertIs(True, folder_to_search in contents)

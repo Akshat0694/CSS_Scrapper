@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id="result"></div>
+
+
+
+
+<html>
+    <head>
+        <meta character="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">l
+        <meta http-equiv="content-language" content="en-us">
+        <meta name="description" content="Tand Labs">
+        <meta name="author" content="Akshat Tandon">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="shortcut icon" type="image/x-icon" href="images/logo.ico">
+        <link rel="shortcut icon" href="images/logo.png">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="style.css">
+        <link href='https://fonts.googleapis.com/css?family=Lato:400italic,300' rel='stylesheet' type='text/css'>
+        <title>Tand Labs</title>
+    </head>
+    <body>
+        <div class="container-fluid" id="pseudoContainer">
+              <p id = "pseudo"> Welcome to Tand Labs </p>
+        </div>
+
+        <div class="container" id="mainContent">
+            <div class="row header">
+                <div class="col-md-3"><img class="img-responsive logo" src="images/logo.png" alt="Tand Labs logo"> </div>
+                <div class="col-md-3"> <span> </span> </div>
+                <div class="col-md-6 text-right">
+                    <h1><a href="https://cz.linkedin.com/in/tandonakshat7" target="_blank">Akshat Tandon</a></h1>
+                    <h3 class ="text-dimmed">
+                      <span id = "automation">Automation Enthusiast </span>&amp;
+                      <span>Front End Ninja</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">Projects</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <img data-toggle="modal" data-target="#project1" class="img-responsive img-center" src="images/GA_LOGO.png" height="420" width="420" alt="GA LOGO">
+                    <h3 class="text-center"> <a href="http://greenavenue.cz" target="_blank">Green Avenue</a></h3>
+                </div>
+                <div class="col-md-6">
+                    <img data-toggle="modal" data-target="#project2" class="img-responsive img-center" src="images/AT_LAB.jpg" height="420" width="420" alt="CVUT Lab">
+                    <h3 class="text-center"> <a href="https://www.fs.cvut.cz/en/home" target="_blank">FS CVUT</a></h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- modals starts below -->
+        <div class="modal fade" id="project1" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">GREEN AVENUE</h4>
+              </div>
+              <div class="modal-body">
+                <img class="img-responsive" src="images/GA_LOGO.png">
+                Tech & Media Consultant </br>
+                Green Avenue s.r.o. </br>
+                Prague, CZ </br>
+                (00420) 777 262 661 </br>
+                <a href="mailto:tandon.akshat@greenavenue.cz"> tandon.akshat@greenavenue.cz </a> </br>
+                <a href="www.greenavenue.cz" target="_blank"> wwww.greenavenue.cz </a>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="project2" tabindex="2" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel1">FS CVUT</h4>
+              </div>
+              <div class="modal-body">
+                <img class="img-responsive" src="images/AT_LAB.jpg">
+                I am working on my thesis in<a href="http://control.fs.cvut.cz/en"> Department of Instrumentation and Control Engineering</a> at the Czech Technical Univeristy in Prague, which explores the applications of Python based web framework called Django, in the field of data analysis, machine learning and its practical application in a model web based application.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer text-center">
+          <div class="container">
+            <a href="http://github.com/akshat0694" class="text-muted" target="_blank">Github</a>
+            |
+            <a href="http://bitbucket.org/akshat0694" class="text-muted" target="_blank">Bitbucket</a>
+            |
+            <a href="https://cz.linkedin.com/in/tandonakshat7" class="text-muted" target="_blank">LinkedIn</a>
+            |
+            <a href="Resume.pdf" class="text-muted" target="_blank">Résumé</a>
+            |
+            <a href="mailto:tandonakshat7@gmail.com" class="text-muted">Contact me</a>
+          </div>
+        </footer>
+
+        <script type="text/javascript" src="jquery-1.12.2.min.js"> </script>
+        <script type="text/javascript" src="js/bootstrap.min.js"> </script>
+        <script type="text/javascript" src="js/app.js"> </script>
+
+
+<script>
+// Check browser support
+if (typeof(Storage) !== "undefined") {
+    // Store
+    localStorage.setItem("lastname", "Smith");
+    // Retrieve
+    document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+} else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+}
+</script>
+
+</body>
+</html>

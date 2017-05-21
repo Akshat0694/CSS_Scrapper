@@ -12,20 +12,23 @@ def main():
     b. Checks for plagiarism
     c. generates success report
     """
-    global folder_exists, folder_exists
     import datetime
 
     try:
         test_takers_list = test_takers()
-        print(test_takers_list)
 
+        # creating required directories
         if not os.path.exists(config_file.rep_dir):
             os.mkdir(config_file.rep_dir)
 
-        ans_folder_name = config_file.answer_folder + "_" + str(datetime.datetime.now())
+        if not os.path.exists(config_file.answer_folder):
+            os.mkdir(config_file.answer_folder)
+
+        ans_folder_name = os.path.join(config_file.answer_folder,  "Answers_" + str(datetime.datetime.now()))
         if not os.path.exists(ans_folder_name):
             os.mkdir(ans_folder_name)
 
+        # downloading answers and working on success report file
         with open(os.path.join(config_file.rep_dir, "report " + str(datetime.datetime.now()) + ".txt"),
                   "w") as report_file:
             report_file.write("_" * 75 + "\n")
@@ -45,7 +48,6 @@ def main():
                             os.rename(tasks_folder, tasks_folder + ".html")
                             existing_files = filenames_from_html(os.path.join(os.getcwd(), tasks_folder + ".html"))
                             os.remove(os.path.join(os.getcwd(), tasks_folder + ".html"))
-                            print (existing_files)
                             if len(existing_files) > 0:
                                 for file_name in existing_files:
                                     file_url = folder_url + "/" + file_name
@@ -66,14 +68,17 @@ def main():
                                     report_file.write(success_text_report)
 
                             else:
+                                # Report specific data
                                 no_files_found = "  " + test_taker + "  | " + tasks_folder + " |No files found in the folder to download |" + "\n"
                                 report_file.write(no_files_found)
 
                         else:
+                            # Report specific data
                             folder_not_found = "  " + test_taker + "  | " + tasks_folder + " |      Folder named " + tasks_folder + " not found       |" + "\n"
                             report_file.write(folder_not_found)
 
                     else:
+                        # Report specific data
                         error_dwnld_file = "  " + test_taker + "  | " + tasks_folder + " |Can't access url or user folder not found|" + "\n"
                         report_file.write(error_dwnld_file)
 
