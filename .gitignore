@@ -1,0 +1,9 @@
+.idea/
+*.docx
+*.doc
+*.odt
+*.html
+Reports/
+Answers/
+venv/
+.pyc
