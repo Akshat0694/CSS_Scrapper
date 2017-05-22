@@ -1,4 +1,4 @@
-# Testructor Lite
+# Testrek
 
 
 This python script is written in Python as part of the project work conducted
