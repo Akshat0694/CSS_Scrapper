@@ -2,6 +2,8 @@ from __future__ import print_function
 from scrapper import *
 import os
 import config_file
+import easygui
+from tqdm import tqdm
 
 
 def main():
@@ -24,18 +26,25 @@ def main():
         if not os.path.exists(config_file.answer_folder):
             os.mkdir(config_file.answer_folder)
 
-        ans_folder_name = os.path.join(config_file.answer_folder,  "Answers_" + str(datetime.datetime.now()))
+        date_time_stamp = str(datetime.datetime.now())
+
+        ans_folder_name = os.path.join(config_file.answer_folder, "Answers_" + date_time_stamp)
         if not os.path.exists(ans_folder_name):
             os.mkdir(ans_folder_name)
 
+        rep_folder_name = os.path.join(config_file.rep_dir, "Report_" + date_time_stamp)
+        if not os.path.exists(rep_folder_name):
+            os.mkdir(rep_folder_name)
+
         # downloading answers and working on success report file
-        with open(os.path.join(config_file.rep_dir, "report " + str(datetime.datetime.now()) + ".txt"),
+        with open(os.path.join(config_file.rep_dir, rep_folder_name, "report " + date_time_stamp + ".csv"),
                   "w") as report_file:
             report_file.write("_" * 75 + "\n")
-            report_file.write(" Test Taker " + "| Tasks " + "  |                 Status                |" + "  File Name  " + "\n")
+            report_file.write(
+                " Test Taker " + "| Tasks " + "  |                 Status                |" + "  File Name  " + "\n")
             report_file.write("-" * 75 + "\n")
 
-            for test_taker in test_takers_list:
+            for test_taker in tqdm(test_takers_list):
                 for tasks_folder in config_file.tasks_folders:
                     # fileurl = "http://users.fs.cvut.cz/~" + test_taker + "/" + tasks_folder + "/test.docx"
                     # fileurl = "http://users.fs.cvut.cz/~" + test_taker + "/test.docx"
@@ -86,13 +95,19 @@ def main():
             report_file.write(" " + "-" * 75 + "\n")
             report_file.close()
 
-            dialog_box("Success!", "Run Result")
+        easygui.ynbox("Done downloading files and creating report. \n\nDo you want to run the plagiarism check now?",
+                      "Run plagiarism check?", choices=("[<F1>]Yes", "[<F2>]No"), default_choice="[<F1>]Yes", cancel_choice="[<F2>]No")
+
+
+
+        easygui.msgbox("Success!", "Run Result")
 
     except Exception as err:
-        dialog_box("Error!" + "\n" + err.message, "Run Result")
+        easygui.msgbox("Error!" + "\n" + err.message, "Run Result")
         raise SystemExit(err.message)
 
 
 if __name__ == "__main__":
+
     main()
     # pass

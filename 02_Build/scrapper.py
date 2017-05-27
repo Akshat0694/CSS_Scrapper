@@ -6,10 +6,6 @@ import os
 from bs4 import BeautifulSoup
 
 
-def dialog_box(msg, title):
-    easygui.msgbox(msg, title)
-
-
 def move_file(filename, test_taker, task_folder, dest_fldr_root):
     shutil.move(os.path.join(os.getcwd(), filename),
                 os.path.join(dest_fldr_root, test_taker, task_folder, filename))
@@ -69,10 +65,10 @@ def test_takers():
 
     except Exception as e:
         if file_name is None:
-            dialog_box("No text file with usernames selected!" + "\n" + "Script exited", "Error")
+            easygui.msgbox("No text file with usernames selected!" + "\n" + "Script exited", "Error")
             raise SystemExit("No text file with usernames selected!")
         else:
-            dialog_box(e.message, "Error")
+            easygui.msgbox(e.message, "Error")
             raise
 
 
