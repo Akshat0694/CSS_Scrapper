@@ -4,6 +4,12 @@
 
 import os
 
+################################################################################
+
+######################################
+####### DOWNLOAD FILE SPECIFIC #######
+######                          ######
+
 # Do not modify this parameter
 curr_dir = os.getcwd()
 
@@ -23,3 +29,21 @@ tasks_folders = ["Task1", "Task2", "Task3"]
 # rep_dir: The directory where the reports generated regarding
 # downloading of the files should be stored.
 rep_dir = os.path.join(curr_dir, "Reports")
+
+################################################################################
+
+################################################################################
+
+######################################
+###### PLAGIARISM CHECK SPECFIC ######
+#####                            #####
+
+# run_plag_check = False
+
+# hash_check: Run plagiarism check on hash or whole file content
+# Set to True if check based on hash or False for check based on content
+# Hash check takes much less time as compared to the other option
+
+hash_check = True
+
+################################################################################
