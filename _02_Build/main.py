@@ -1,11 +1,12 @@
 from __future__ import print_function
-from scrapper import *
-import os
-import config_file
+from _02_Build.scrapper import *
+from _02_Build.config_file import *
 import easygui
 from tqdm import tqdm
-from plagiarism import *
+from _02_Build.plagiarism import *
 import hashlib
+from fuzzywuzzy import fuzz
+import os
 
 
 def main():
@@ -22,24 +23,25 @@ def main():
         test_takers_list = test_takers()
 
         # creating required directories
-        if not os.path.exists(config_file.rep_dir):
-            os.mkdir(config_file.rep_dir)
+        if not os.path.exists(rep_dir):
+            os.mkdir(rep_dir)
 
-        if not os.path.exists(config_file.answer_folder):
-            os.mkdir(config_file.answer_folder)
+        if not os.path.exists(answer_folder):
+            os.mkdir(answer_folder)
 
-        date_time_stamp = str(datetime.datetime.now())
+        date_time_stamp_raw = str(datetime.datetime.now())
+        date_time_stamp = date_time_stamp_raw.replace(":", ".")
 
-        ans_folder_name = os.path.join(config_file.answer_folder, "Answers_" + date_time_stamp)
+        ans_folder_name = os.path.join(answer_folder, "Answers_" + date_time_stamp)
         if not os.path.exists(ans_folder_name):
             os.mkdir(ans_folder_name)
 
-        rep_folder_name = os.path.join(config_file.rep_dir, "Report_" + date_time_stamp)
+        rep_folder_name = os.path.join(rep_dir, "Report_" + date_time_stamp)
         if not os.path.exists(rep_folder_name):
             os.mkdir(rep_folder_name)
 
         # downloading answers and working on success report file
-        with open(os.path.join(config_file.rep_dir, rep_folder_name, "report " + date_time_stamp + ".csv"),
+        with open(os.path.join(rep_dir, rep_folder_name, "report " + date_time_stamp + ".csv"),
                   "w") as report_file:
             report_file.write("_" * 75 + "\n")
             report_file.write(
@@ -47,11 +49,9 @@ def main():
             report_file.write("-" * 75 + "\n")
 
             for test_taker in tqdm(test_takers_list):
-                for tasks_folder in config_file.tasks_folders:
-                    # fileurl = "http://users.fs.cvut.cz/~" + test_taker + "/" + tasks_folder + "/test.docx"
-                    # fileurl = "http://users.fs.cvut.cz/~" + test_taker + "/test.docx"
-                    usr_folder = config_file.web_url + test_taker
-                    folder_url = config_file.web_url + test_taker + "/" + tasks_folder
+                for tasks_folder in tasks_folders:
+                    usr_folder = web_url + test_taker
+                    folder_url = web_url + test_taker + "/" + tasks_folder
                     if file_fldr_exists(usr_folder):
                         folder_name = file_download(folder_url)
 
@@ -100,10 +100,10 @@ def main():
         if easygui.ynbox("Done downloading files and creating report. \n\nDo you want to run the plagiarism check now?",
                          "Run plagiarism check?", choices=("[<F1>]Yes", "[<F2>]No"),
                          default_choice="[<F1>]Yes", cancel_choice="[<F2>]No"):
-            if not config_file.hash_check:
+            if not hash_check:
                 combs = {}
                 final_results = {}
-                for Answer_folder in tqdm(retrieve_folder_content(config_file.answer_folder)):
+                for Answer_folder in tqdm(retrieve_folder_content(answer_folder)):
                     for Student_folder in retrieve_folder_content(Answer_folder):
                         for Task_folder in retrieve_folder_content(Student_folder):
                             for Ans_file in retrieve_folder_content(Task_folder, True):
@@ -121,8 +121,8 @@ def main():
                                                     stu_fol_2 + "_" + stu_fol_1 + "_" + os.path.basename(Task_folder)]
                                                 if temp_comb[0] not in combs:
                                                     for Ans_file2 in retrieve_folder_content(Task_folder2, True):
-                                                        with open(Ans_file2, 'r') as fp2:
-                                                            with open(Ans_file, 'r') as fp:
+                                                        with open(Ans_file2, 'r', encoding="utf8") as fp2:
+                                                            with open(Ans_file, 'r', encoding="utf8") as fp:
                                                                 s = fp.read()
                                                                 s_tocomp = fp2.read()
                                                                 result = fuzz.ratio(s, s_tocomp)
@@ -134,27 +134,28 @@ def main():
             else:
                 combs = {}
                 final_results = {}
-                for Answer_folder in tqdm(retrieve_folder_content(config_file.answer_folder)):
+                for Answer_folder in tqdm(retrieve_folder_content(answer_folder)):
                     for Student_folder in retrieve_folder_content(Answer_folder):
                         for Task_folder in retrieve_folder_content(Student_folder):
                             for Ans_file in retrieve_folder_content(Task_folder, True):
-                                with open(Ans_file, 'r') as fp:
-                                    # Student_folder2 is the student folder to compare the Ans_file content with
-                                    for Student_folder2 in retrieve_folder_content(Answer_folder):
-                                        if Student_folder2 != Student_folder:
-                                            # Task_folder2 is the Task folder inside the Student_folder2 to compare the Ans_file with
-                                            for Task_folder2 in retrieve_folder_content(Student_folder2):
-                                                if os.path.basename(Task_folder2) == os.path.basename(Task_folder):
-                                                    stu_fol_1 = os.path.basename(Student_folder)
-                                                    stu_fol_2 = os.path.basename(Student_folder2)
-                                                    # stu_tskfile_1 = os.path.basename(Ans_file)
-                                                    temp_comb = [stu_fol_1 + "_" + stu_fol_2 + "_" + os.path.basename(
-                                                        Task_folder),
-                                                                 stu_fol_2 + "_" + stu_fol_1 + "_" + os.path.basename(
-                                                                     Task_folder)]
-                                                    if temp_comb[0] not in combs:
-                                                        for Ans_file2 in retrieve_folder_content(Task_folder2, True):
-                                                            with open(Ans_file2, 'r') as fp2:
+
+                                # Student_folder2 is the student folder to compare the Ans_file content with
+                                for Student_folder2 in retrieve_folder_content(Answer_folder):
+                                    if Student_folder2 != Student_folder:
+                                        # Task_folder2 is the Task folder inside the Student_folder2 to compare the Ans_file with
+                                        for Task_folder2 in retrieve_folder_content(Student_folder2):
+                                            if os.path.basename(Task_folder2) == os.path.basename(Task_folder):
+                                                stu_fol_1 = os.path.basename(Student_folder)
+                                                stu_fol_2 = os.path.basename(Student_folder2)
+                                                # stu_tskfile_1 = os.path.basename(Ans_file)
+                                                temp_comb = [stu_fol_1 + "_" + stu_fol_2 + "_" + os.path.basename(
+                                                    Task_folder),
+                                                             stu_fol_2 + "_" + stu_fol_1 + "_" + os.path.basename(
+                                                                 Task_folder)]
+                                                if temp_comb[0] not in combs:
+                                                    for Ans_file2 in retrieve_folder_content(Task_folder2, True):
+                                                        with open(Ans_file, 'r', encoding="utf8") as fp:
+                                                            with open(Ans_file2, 'r', encoding="utf8") as fp2:
                                                                 s_buf = fp.read()
 
                                                                 hasher = hashlib.md5()
@@ -167,9 +168,9 @@ def main():
                                                                 s_tocomp = hasher.digest()
                                                                 result = fuzz.ratio(s, s_tocomp)
 
-                                                                combs.update(
-                                                                    {temp_comb[0]: result, temp_comb[1]: result})
-                                                                final_results.update({temp_comb[0]: result})
+                                                            combs.update(
+                                                                {temp_comb[0]: result, temp_comb[1]: result})
+                                                            final_results.update({temp_comb[0]: result})
                 print(final_results)
 
         else:
@@ -178,8 +179,8 @@ def main():
         easygui.msgbox("Success!", "Run Result")
 
     except Exception as err:
-        easygui.msgbox("Error!" + "\n" + err.message, "Run Result")
-        raise SystemExit(err.message)
+        easygui.msgbox("Error!" + "\n" + str(err), "Run Result")
+        raise SystemExit(str(err))
 
 
 if __name__ == "__main__":
