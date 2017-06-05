@@ -1,12 +1,17 @@
 from __future__ import print_function
-from _02_Build.scrapper import *
+
 from _02_Build.config_file import *
-import easygui
-from tqdm import tqdm
 from _02_Build.plagiarism import *
+from _02_Build.scrapper import *
+
+import csv
+import json
 import hashlib
-from fuzzywuzzy import fuzz
 import os
+
+from fuzzywuzzy import fuzz
+from tqdm import tqdm
+import easygui
 
 
 def main():
@@ -121,8 +126,8 @@ def main():
                                                     stu_fol_2 + "_" + stu_fol_1 + "_" + os.path.basename(Task_folder)]
                                                 if temp_comb[0] not in combs:
                                                     for Ans_file2 in retrieve_folder_content(Task_folder2, True):
-                                                        with open(Ans_file2, 'r', encoding="utf8") as fp2:
-                                                            with open(Ans_file, 'r', encoding="utf8") as fp:
+                                                        with open(Ans_file2, 'r') as fp2:
+                                                            with open(Ans_file, 'r') as fp:
                                                                 s = fp.read()
                                                                 s_tocomp = fp2.read()
                                                                 result = fuzz.ratio(s, s_tocomp)
@@ -170,8 +175,21 @@ def main():
 
                                                             combs.update(
                                                                 {temp_comb[0]: result, temp_comb[1]: result})
-                                                            final_results.update({temp_comb[0]: result})
+                                                            final_results.update({"comb": temp_comb[0], "similarity": result})
                 print(final_results)
+
+                # # Generating csv from dictionary combs
+                # final_results_json = json.dumps(final_results)
+                # final_results = json.loads(final_results_json)
+                #
+                # f = csv.writer(open("plagiarism_check.csv", "wb+"))
+                #
+                # # Write CSV Header
+                # f.writerow(["student1_student2_task#", "similarity"])
+                #
+                # for final_result in final_results:
+                #     f.writerow([final_result.key(),
+                #                 final_result.value()])
 
         else:
             pass

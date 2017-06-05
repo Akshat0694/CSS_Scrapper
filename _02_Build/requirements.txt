@@ -2,3 +2,4 @@ requests==2.14.2
 fuzzywuzzy==0.15.0
 beautifulsoup4==4.6.0
 easygui==0.98.1
+
