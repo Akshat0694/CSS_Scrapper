@@ -15,7 +15,7 @@ curr_dir = os.getcwd()
 
 # web_url: Specify the root url where the student folders are placed
 # For e.g.: web_url = "http://users.fs.cvut.cz/~"
-web_url = "http://users.fs.cvut.cz/~"
+web_url = "http://users.fs.cvut.cz/"
 
 # answer_folder: The directory where downloaded files are stored
 # For e.g.: answer_folder = os.path.join(curr_dir, "Answers")

@@ -15,3 +15,5 @@ def retrieve_folder_content(src_path, file_check=False):
     else:
         contents = [os.path.join(src_path, name) for name in os.listdir(src_path) if not os.path.isdir(os.path.join(src_path, name))]
     return contents
+
+

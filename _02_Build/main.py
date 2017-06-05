@@ -1,8 +1,8 @@
 from __future__ import print_function
 
-from _02_Build.config_file import *
-from _02_Build.plagiarism import *
-from _02_Build.scrapper import *
+from config_file import *
+from plagiarism import *
+from scrapper import *
 
 import csv
 import json
@@ -55,8 +55,12 @@ def main():
 
             for test_taker in tqdm(test_takers_list):
                 for tasks_folder in tasks_folders:
-                    usr_folder = web_url + test_taker
-                    folder_url = web_url + test_taker + "/" + tasks_folder
+                    if "." in test_taker:
+                        usr_folder = web_url + test_taker
+                        folder_url = web_url + test_taker + "/" + tasks_folder
+                    else:
+                        usr_folder = web_url + "~" + test_taker
+                        folder_url = web_url + "~" + test_taker + "/" + tasks_folder
                     if file_fldr_exists(usr_folder):
                         folder_name = file_download(folder_url)
 
@@ -122,8 +126,8 @@ def main():
                                                 stu_fol_2 = os.path.basename(Student_folder2)
                                                 # stu_tskfile_1 = os.path.basename(Ans_file)
                                                 temp_comb = [
-                                                    stu_fol_1 + "_" + stu_fol_2 + "_" + os.path.basename(Task_folder),
-                                                    stu_fol_2 + "_" + stu_fol_1 + "_" + os.path.basename(Task_folder)]
+                                                    os.path.basename(Task_folder) + "_" + stu_fol_1 + "_" + stu_fol_2,
+                                                    os.path.basename(Task_folder) + "_" + stu_fol_2 + "_" + stu_fol_1]
                                                 if temp_comb[0] not in combs:
                                                     for Ans_file2 in retrieve_folder_content(Task_folder2, True):
                                                         with open(Ans_file2, 'r') as fp2:
@@ -141,9 +145,9 @@ def main():
                 final_results = {}
                 for Answer_folder in tqdm(retrieve_folder_content(answer_folder)):
                     for Student_folder in retrieve_folder_content(Answer_folder):
+                        ## html_td = "<tr> <td> " + student_folder + "</td>"
                         for Task_folder in retrieve_folder_content(Student_folder):
                             for Ans_file in retrieve_folder_content(Task_folder, True):
-
                                 # Student_folder2 is the student folder to compare the Ans_file content with
                                 for Student_folder2 in retrieve_folder_content(Answer_folder):
                                     if Student_folder2 != Student_folder:
@@ -153,30 +157,123 @@ def main():
                                                 stu_fol_1 = os.path.basename(Student_folder)
                                                 stu_fol_2 = os.path.basename(Student_folder2)
                                                 # stu_tskfile_1 = os.path.basename(Ans_file)
-                                                temp_comb = [stu_fol_1 + "_" + stu_fol_2 + "_" + os.path.basename(
-                                                    Task_folder),
-                                                             stu_fol_2 + "_" + stu_fol_1 + "_" + os.path.basename(
-                                                                 Task_folder)]
+                                                temp_comb = [
+                                                    os.path.basename(Task_folder) + "_" + stu_fol_1 + "_" + stu_fol_2,
+                                                    os.path.basename(Task_folder) + "_" + stu_fol_2 + "_" + stu_fol_1]
                                                 if temp_comb[0] not in combs:
                                                     for Ans_file2 in retrieve_folder_content(Task_folder2, True):
-                                                        with open(Ans_file, 'r', encoding="utf8") as fp:
-                                                            with open(Ans_file2, 'r', encoding="utf8") as fp2:
-                                                                s_buf = fp.read()
+                                                        with open(Ans_file, 'r') as fp:
+                                                            with open(Ans_file2, 'r') as fp2:
 
+                                                                s_buf = fp.read()
                                                                 hasher = hashlib.md5()
                                                                 hasher.update(s_buf)
                                                                 s = hasher.digest()
-                                                                s_tocomp_buf = fp2.read()
 
+                                                                s_tocomp_buf = fp2.read()
                                                                 hasher = hashlib.md5()
                                                                 hasher.update(s_tocomp_buf)
                                                                 s_tocomp = hasher.digest()
+
                                                                 result = fuzz.ratio(s, s_tocomp)
 
                                                             combs.update(
                                                                 {temp_comb[0]: result, temp_comb[1]: result})
-                                                            final_results.update({"comb": temp_comb[0], "similarity": result})
-                print(final_results)
+                                                            final_results.update({temp_comb[0]: result})
+                                                            # final_results.update({"comb": temp_comb[0], "similarity": result})
+                        ## html_td = html_td + </tr>
+                    print(final_results)
+
+
+        # Creating HTML file with plagiarism check results
+            h_H2 = "<h2> %s </h2>"
+            h_div = "<div> %s </div>"
+            t_table = "<table> %s </table>"
+            t_row = "<tr> %s </tr>"
+            t_header = "<th bgcolcor=\"#F5F1F1\"> %s </th>"
+            t_data = "<td> %s </td>"
+            t_data_red = "<td bgcolor=\"#FF6747\"> %s </td>"
+            html_beg = """
+            <html>
+                <head>
+                    <title>Plagiarism Results</title>
+                        <style>
+                            table {
+                                font-family: arial, sans-serif;
+                                border-collapse: collapse;
+                                width: 100%;
+                            }
+
+                            td, th {
+                                border: 1px solid #dddddd;
+                                text-align: left;
+                                padding: 8px;
+                            }
+
+                            tr:nth-child(even) {
+                                background-color: #dddddd;
+                            }
+                        </style>
+                </head>
+                <body>
+            """
+
+            html_end = """
+                </body>
+            <html>
+
+            """
+
+            html_div = ""
+
+
+            for tasks_folder in tasks_folders:
+                task_spec_dict = {}
+                before_ = []
+                _after = []
+                for key in final_results:
+                    if tasks_folder in key:
+                        task_spec_dict.update({key: final_results[key]})
+                        before_.append(key.split("_")[1])
+                        _after.append(key.split("_")[2])
+
+                before_ = list(set(before_))
+                _after = list(set(_after))
+
+                heading = h_H2 % tasks_folder
+
+                tables = ""
+                table_rows = ""
+                table_headers = ""
+
+                table_headers += t_header % "Test Takers"
+
+                for b in before_:
+                    table_headers += t_header % b
+                table_rows += t_row % table_headers
+                table_headers = ""
+
+                for a in _after:
+                    new_data = t_data % a
+                    for b in before_:
+                        if a != b:
+                            sim_res = final_results[tasks_folder + "_" + b + "_" + a]
+                            if sim_res > 80:
+                                new_data += t_data_red % sim_res
+                            else:
+                                new_data += t_data % sim_res
+                    table_rows += t_row % new_data
+                tables += tables + t_table % table_rows
+
+                html_div += heading + h_div % tables
+
+
+
+            whole_html = html_beg + html_div + html_end
+
+            f = open("plagiarism_check.html", "w+")
+            f.write(whole_html)
+            f.close()
 
                 # # Generating csv from dictionary combs
                 # final_results_json = json.dumps(final_results)
@@ -194,7 +291,7 @@ def main():
         else:
             pass
 
-        easygui.msgbox("Success!", "Run Result")
+        easygui.msgbox("Success! running the script \nCheck download report in Reports folder.", "Run Result")
 
     except Exception as err:
         easygui.msgbox("Error!" + "\n" + str(err), "Run Result")

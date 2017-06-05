@@ -61,7 +61,7 @@ def test_takers():
         for i in range(len(test_takers_list)):
             if test_takers_list[i].endswith("\n") and test_takers_list[i] != "\n" and test_takers_list[i] != "":
                 test_takers_list_ref.append(test_takers_list[i][:-1])
-        return test_takers_list_ref
+        return list(set(test_takers_list_ref))
 
     except Exception as e:
         if file_name is None:
