@@ -4,8 +4,7 @@ from config_file import *
 from plagiarism import *
 from scrapper import *
 
-import csv
-import json
+import codecs
 import hashlib
 import os
 
@@ -26,6 +25,7 @@ def main():
 
     try:
         test_takers_list = test_takers()
+        types_of_encoding = ["utf-8", "cp1252", "cp850", "utf8"]
 
         # creating required directories
         if not os.path.exists(rep_dir):
@@ -130,14 +130,36 @@ def main():
                                                     os.path.basename(Task_folder) + "_" + stu_fol_2 + "_" + stu_fol_1]
                                                 if temp_comb[0] not in combs:
                                                     for Ans_file2 in retrieve_folder_content(Task_folder2, True):
-                                                        with open(Ans_file2, 'r') as fp2:
-                                                            with open(Ans_file, 'r') as fp:
-                                                                s = fp.read()
-                                                                s_tocomp = fp2.read()
-                                                                result = fuzz.ratio(s, s_tocomp)
-                                                                combs.update(
-                                                                    {temp_comb[0]: result, temp_comb[1]: result})
-                                                                final_results.update({temp_comb[0]: result})
+                                                        # with open(Ans_file2, 'r') as fp2:
+                                                        #     with open(Ans_file, 'r') as fp:
+                                                        #         s = fp.read()
+                                                        #         s_tocomp = fp2.read()
+                                                        #         result = fuzz.ratio(s, s_tocomp)
+                                                        #         combs.update(
+                                                        #             {temp_comb[0]: result, temp_comb[1]: result})
+                                                        #         final_results.update({temp_comb[0]: result})
+
+                                                        for encoding_type in types_of_encoding:
+                                                            if temp_comb[0] not in combs:
+                                                                with codecs.open(Ans_file, encoding=encoding_type,
+                                                                                 errors='replace') as fp:
+                                                                    for encoding_type in types_of_encoding:
+                                                                        if temp_comb[0] not in combs:
+                                                                            with codecs.open(Ans_file2, encoding=encoding_type,
+                                                                                             errors='replace') as fp2:
+                                                                                # with open(Ans_file, 'r') as fp:
+                                                                                # with open(Ans_file2, 'r') as fp2:
+
+                                                                                s = fp.read()
+                                                                                # print(s.encode('utf-8'))
+                                                                                s_tocomp = fp2.read()
+                                                                                # print(s_tocomp.encode('utf-8'))
+                                                                                result = fuzz.ratio(s, s_tocomp)
+
+                                                                                combs.update(
+                                                                                    {temp_comb[0]: result,
+                                                                                     temp_comb[1]: result})
+                                                                                final_results.update({temp_comb[0]: result})
                 print(final_results)
 
             else:
@@ -162,30 +184,43 @@ def main():
                                                     os.path.basename(Task_folder) + "_" + stu_fol_2 + "_" + stu_fol_1]
                                                 if temp_comb[0] not in combs:
                                                     for Ans_file2 in retrieve_folder_content(Task_folder2, True):
-                                                        with open(Ans_file, 'r') as fp:
-                                                            with open(Ans_file2, 'r') as fp2:
 
-                                                                s_buf = fp.read()
-                                                                hasher = hashlib.md5()
-                                                                hasher.update(s_buf)
-                                                                s = hasher.digest()
-
-                                                                s_tocomp_buf = fp2.read()
-                                                                hasher = hashlib.md5()
-                                                                hasher.update(s_tocomp_buf)
-                                                                s_tocomp = hasher.digest()
-
-                                                                result = fuzz.ratio(s, s_tocomp)
-
-                                                            combs.update(
-                                                                {temp_comb[0]: result, temp_comb[1]: result})
-                                                            final_results.update({temp_comb[0]: result})
-                                                            # final_results.update({"comb": temp_comb[0], "similarity": result})
-                        ## html_td = html_td + </tr>
-                    print(final_results)
+                                                        for encoding_type in types_of_encoding:
+                                                            if temp_comb[0] not in combs:
+                                                                with codecs.open(Ans_file, encoding=encoding_type,
+                                                                                 errors='replace') as fp:
+                                                                    for encoding_type in types_of_encoding:
+                                                                        if temp_comb[0] not in combs:
+                                                                            with codecs.open(Ans_file2, encoding=encoding_type,
+                                                                                             errors='replace') as fp2:
+                                                                                # with open(Ans_file, 'r') as fp:
+                                                                                # with open(Ans_file2, 'r') as fp2:
 
 
-        # Creating HTML file with plagiarism check results
+                                                                                s_buf_raw = fp.read()
+                                                                                s_buf = s_buf_raw.encode('utf-8')
+                                                                                hasher = hashlib.md5()
+                                                                                hasher.update(s_buf)
+                                                                                s = hasher.digest()
+
+                                                                                s_tocomp_buf_raw = fp2.read()
+                                                                                s_tocomp_buf = s_tocomp_buf_raw.encode('utf-8')
+                                                                                hasher = hashlib.md5()
+                                                                                hasher.update(s_tocomp_buf)
+                                                                                s_tocomp = hasher.digest()
+
+                                                                                result = fuzz.ratio(s, s_tocomp)
+
+                                                                                combs.update(
+                                                                                    {temp_comb[0]: result,
+                                                                                     temp_comb[1]: result})
+                                                                                final_results.update({temp_comb[0]: result})
+                                                                                # final_results.update({"comb": temp_comb[0], "similarity": result})
+                                                                                ## html_td = html_td + </tr>
+                print(final_results)
+
+
+                # Creating HTML file with plagiarism check results
             h_H2 = "<h2> %s </h2>"
             h_div = "<div> %s </div>"
             t_table = "<table> %s </table>"
@@ -267,7 +302,12 @@ def main():
                     new_data = t_data % a
                     for b in before_:
                         if a != b:
-                            sim_res = final_results[tasks_folder + "_" + b + "_" + a]
+                            try:
+                                sim_res = final_results[tasks_folder + "_" + b + "_" + a]
+                            except Exception as e:
+                                sim_res = 0
+                                print(e)
+                                pass
                             if sim_res > 80:
                                 new_data += t_data_red % sim_res
                             else:
@@ -276,8 +316,6 @@ def main():
                 tables += tables + t_table % table_rows
 
                 html_div += heading + h_div % tables + "<br>"
-
-
 
             whole_html = html_beg + html_div + html_end
 

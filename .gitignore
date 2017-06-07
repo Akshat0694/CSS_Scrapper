@@ -6,3 +6,4 @@ venv/
 ~$esis_proposal.docx
 *.html
 .DS_Store
+__pycache__

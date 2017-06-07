@@ -44,6 +44,6 @@ rep_dir = os.path.join(curr_dir, "Reports")
 # Set to True if check based on hash or False for check based on content
 # Hash check takes much less time as compared to the other option
 
-hash_check = False
+hash_check = True
 
 ################################################################################
