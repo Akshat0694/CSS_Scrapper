@@ -210,12 +210,23 @@ def main():
                                 padding: 8px;
                             }
 
+                            h1 { color: #111; font-family: 'Helvetica Neue', sans-serif;
+                            font-size: 80px; font-weight: bold; letter-spacing: -1px;
+                            line-height: 1; text-align: center;
+                            }
+
+                            h2 { color: #111; font-family: 'Open Sans', sans-serif;
+                            font-size: 30px; font-weight: 300; line-height: 32px;
+                            margin: 0 0 10px; text-align: left;
+                            }
+
                             tr:nth-child(even) {
                                 background-color: #dddddd;
                             }
                         </style>
                 </head>
                 <body>
+                <h1> Plagiarism Check Results </h1>
             """
 
             html_end = """
@@ -225,7 +236,6 @@ def main():
             """
 
             html_div = ""
-
 
             for tasks_folder in tasks_folders:
                 task_spec_dict = {}
@@ -265,7 +275,7 @@ def main():
                     table_rows += t_row % new_data
                 tables += tables + t_table % table_rows
 
-                html_div += heading + h_div % tables
+                html_div += heading + h_div % tables + "<br>"
 
 
 
@@ -275,18 +285,18 @@ def main():
             f.write(whole_html)
             f.close()
 
-                # # Generating csv from dictionary combs
-                # final_results_json = json.dumps(final_results)
-                # final_results = json.loads(final_results_json)
-                #
-                # f = csv.writer(open("plagiarism_check.csv", "wb+"))
-                #
-                # # Write CSV Header
-                # f.writerow(["student1_student2_task#", "similarity"])
-                #
-                # for final_result in final_results:
-                #     f.writerow([final_result.key(),
-                #                 final_result.value()])
+            # # Generating csv from dictionary combs
+            # final_results_json = json.dumps(final_results)
+            # final_results = json.loads(final_results_json)
+            #
+            # f = csv.writer(open("plagiarism_check.csv", "wb+"))
+            #
+            # # Write CSV Header
+            # f.writerow(["student1_student2_task#", "similarity"])
+            #
+            # for final_result in final_results:
+            #     f.writerow([final_result.key(),
+            #                 final_result.value()])
 
         else:
             pass
