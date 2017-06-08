@@ -154,13 +154,20 @@ def main():
                                                                                 # print(s.encode('utf-8'))
                                                                                 s_tocomp = fp2.read()
                                                                                 # print(s_tocomp.encode('utf-8'))
-                                                                                result = fuzz.ratio(s, s_tocomp)
+                                                                                if type_of_check == "Simple Ratio":
+                                                                                    result = fuzz.ratio(s, s_tocomp)
+                                                                                elif type_of_check == "Partial Ratio":
+                                                                                    result = fuzz.partial_ratio(s, s_tocomp)
+                                                                                elif type_of_check == "Token Sort Ratio":
+                                                                                    result = fuzz.token_sort_ratio(s, s_tocomp)
+                                                                                elif type_of_check == "Token Set Ratio":
+                                                                                    result = fuzz.token_set_ratio(s, s_tocomp)
 
                                                                                 combs.update(
                                                                                     {temp_comb[0]: result,
                                                                                      temp_comb[1]: result})
                                                                                 final_results.update({temp_comb[0]: result})
-                print(final_results)
+                #print(final_results)
 
             else:
                 combs = {}
@@ -209,7 +216,14 @@ def main():
                                                                                 hasher.update(s_tocomp_buf)
                                                                                 s_tocomp = hasher.digest()
 
-                                                                                result = fuzz.ratio(s, s_tocomp)
+                                                                                if type_of_check == "Simple Ratio":
+                                                                                    result = fuzz.ratio(s, s_tocomp)
+                                                                                elif type_of_check == "Partial Ratio":
+                                                                                    result = fuzz.partial_ratio(s, s_tocomp)
+                                                                                elif type_of_check == "Token Sort Ratio":
+                                                                                    result = fuzz.token_sort_ratio(s, s_tocomp)
+                                                                                elif type_of_check == "Token Set Ratio":
+                                                                                    result = fuzz.token_set_ratio(s, s_tocomp)
 
                                                                                 combs.update(
                                                                                     {temp_comb[0]: result,
@@ -217,10 +231,10 @@ def main():
                                                                                 final_results.update({temp_comb[0]: result})
                                                                                 # final_results.update({"comb": temp_comb[0], "similarity": result})
                                                                                 ## html_td = html_td + </tr>
-                print(final_results)
+                #print(final_results)
 
 
-                # Creating HTML file with plagiarism check results
+            # Creating HTML file with plagiarism check results
             h_H2 = "<h2> %s </h2>"
             h_div = "<div> %s </div>"
             t_table = "<table> %s </table>"
@@ -284,7 +298,7 @@ def main():
                         if key.split("_")[2] not in before_:
                             _after.append(key.split("_")[2])
 
-                print(task_spec_dict)
+                #print(task_spec_dict)
                 before_ = list(set(before_))
                 _after = list(set(_after))
 
@@ -309,7 +323,7 @@ def main():
                                 sim_res = final_results[tasks_folder + "_" + b + "_" + a]
                             except Exception as e:
                                 sim_res = 0
-                                print(e)
+                                #print(e)
                                 pass
                             if sim_res > 80:
                                 new_data += t_data_red % sim_res
@@ -318,7 +332,7 @@ def main():
                     table_rows += t_row % new_data
                 tables += tables + t_table % table_rows
 
-                html_div += heading + h_div % tables + "<br>"
+                html_div += heading + h_div % tables + "<br>" + "<br>"
 
             whole_html = html_beg + html_div + html_end
 
