@@ -251,7 +251,7 @@ def main():
                             }
 
                             h2 { color: #111; font-family: 'Open Sans', sans-serif;
-                            font-size: 30px; font-weight: 300; line-height: 32px;
+                            font-size: 30px; font-weight: bold; line-height: 32px;
                             margin: 0 0 10px; text-align: left;
                             }
 
@@ -273,15 +273,18 @@ def main():
             html_div = ""
 
             for tasks_folder in tasks_folders:
-                task_spec_dict = {}
+                # task_spec_dict = {}
                 before_ = []
                 _after = []
                 for key in final_results:
                     if tasks_folder in key:
-                        task_spec_dict.update({key: final_results[key]})
-                        before_.append(key.split("_")[1])
-                        _after.append(key.split("_")[2])
+                        # task_spec_dict.update({key: final_results[key]})
+                        if key.split("_")[1] not in _after:
+                            before_.append(key.split("_")[1])
+                        if key.split("_")[2] not in before_:
+                            _after.append(key.split("_")[2])
 
+                print(task_spec_dict)
                 before_ = list(set(before_))
                 _after = list(set(_after))
 
