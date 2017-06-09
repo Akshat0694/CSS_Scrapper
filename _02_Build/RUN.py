@@ -81,11 +81,13 @@ def main():
                                     if not os.path.exists(dest_task):
                                         os.mkdir(dest_task)
 
-                                    move_file(file_name, test_taker, tasks_folder, ans_folder_name)
-
-                                    # Report specific data
-                                    success_text_report = "  " + test_taker + "  | " + tasks_folder + " |      Files successfully downloaded      | " + file_name + "\n"
-                                    report_file.write(success_text_report)
+                                    try:
+                                        move_file(file_name, test_taker, tasks_folder, ans_folder_name)
+                                        # Report specific data
+                                        success_text_report = "  " + test_taker + "  | " + tasks_folder + " |      Files successfully downloaded      | " + file_name + "\n"
+                                        report_file.write(success_text_report)
+                                    except Exception:
+                                        pass
 
                             else:
                                 # Report specific data

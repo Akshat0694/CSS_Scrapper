@@ -24,7 +24,6 @@ def file_fldr_exists(file_url):
 
 
 def file_download(file_url):
-    # type: (object) -> object
     """Downloads file from the server
 
     :param file_url: url to the file to be downloaded
@@ -34,10 +33,15 @@ def file_download(file_url):
     r = requests.get(file_url, stream=True)
     if r.status_code == 200:
         with open(local_filename, 'wb') as f:
+            count = 0
             for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-                    f.flush()
+                count += 1
+                if count <= 3000:
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
+                else:
+                    return 0
         return local_filename
         pass
     return 0
@@ -49,7 +53,6 @@ def test_takers():
     :return: List with usernames of test takers
     """
     try:
-        # easygui.fileopenbox(msg=None, title=None, default='*', filetypes=None, multiple=False)
         msg = "Choose a text file with test taker's usernames on separate lines."
         title = "Choose a .txt file"
         file_name = easygui.fileopenbox(msg=msg, title=title, filetypes=["*.txt"])
