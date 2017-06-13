@@ -46,7 +46,7 @@ rep_dir = os.path.join(curr_dir, "Reports")
 
 hash_check = False
 
-# type_of_check: Type of string comparision
+# type_of_check: Type of string comparison
 # Set to "Simple Ratio" for simple ratio
 # All available options: "Simple Ratio", "Partial Ratio", "Token Sort Ratio", "Token Set Ratio"
 

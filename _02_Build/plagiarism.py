@@ -7,7 +7,7 @@ def retrieve_folder_content(src_path, file_check=False):
 
     :param src_path: full_path of the folder for which the subdirs are to be retrieved
     :param file_check: Check for files in folder
-    :return: List of absolute path to the subdirs in a dir
+    :return: List of absolute path to the subdirs or files in a dir
     """
 
     if not file_check:
