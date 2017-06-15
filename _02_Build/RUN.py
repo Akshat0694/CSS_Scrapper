@@ -18,8 +18,9 @@ def main():
 
     This function does the following:
     a. calls the file_download function to download the files from a web location
-    b. Checks for plagiarism
-    c. generates success report
+    b. generates file download success report
+    c. checks for plagiarism
+    d. generates plagiarism check report
     """
     import datetime
 
@@ -368,5 +369,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    print(os.path.abspath('..'))
     # pass

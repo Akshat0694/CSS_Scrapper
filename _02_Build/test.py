@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from unittest import TestCase
 from .scrapper import file_download, filenames_from_html
 from .plagiarism import *
-# import os.path
 import os
 import shutil
 
@@ -23,7 +22,9 @@ class TestDocxFileDownload(TestCase):
             os.remove(os.path.join(base_dir, "test.docx"))
         else:
             file_download("http://users.fs.cvut.cz/~tandoaks/test.docx")
-            self.assertIs(True, os.path.isfile("test.docx"))
+            result = os.path.isfile("test.docx")
+            os.remove(os.path.join(base_dir, "test.docx"))
+            self.assertIs(True, result)
 
 
 class TestFilenamesFromHTML(TestCase):
@@ -34,7 +35,7 @@ class TestFilenamesFromHTML(TestCase):
         shutil.move(os.path.join(os.getcwd(), "Task1"), src_path)
         existing_files = filenames_from_html(src_path)
         os.remove(src_path)
-        self.assertIs(True, "test.docx" in existing_files)
+        self.assertIs(True, "task1.docx" in existing_files)
 
 
 class TestRetrieveFolderContent(TestCase):
