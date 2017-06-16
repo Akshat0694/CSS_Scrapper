@@ -93,7 +93,7 @@ def main():
                                         success_text_report = "  " + test_taker + "  | " + tasks_folder + " |      Files successfully downloaded      | " + file_name + "\n"
                                         report_file.write(success_text_report)
                                     except Exception:
-                                        success_text_report = "  " + test_taker + "  | " + tasks_folder + " |        Files too big to download        | " + file_name + "\n"
+                                        success_text_report = "  " + str(test_taker) + "  | " + str(tasks_folder) + " |        Files too big to download        | " + str(file_name) + "\n"
                                         report_file.write(success_text_report)
                                         pass
 
