@@ -1,3 +1,8 @@
+"""
+    This is the module containing the main logic for Testructor.
+    From file downloading to plagiarism check, all takes places in here.
+"""
+
 from __future__ import print_function
 
 from config_file import *
@@ -114,6 +119,7 @@ def main():
         if easygui.ynbox("Done downloading files and creating report. \n\nDo you want to run the plagiarism check now?",
                          "Run plagiarism check?", choices=("[<F1>]Yes", "[<F2>]No"),
                          default_choice="[<F1>]Yes", cancel_choice="[<F2>]No"):
+
             if not hash_check:
                 combs = {}
                 final_results = {}
@@ -360,7 +366,6 @@ def main():
 
         else:
             pass
-
         easygui.msgbox("Success! running the script \nCheck download report in Reports folder.", "Run Result")
 
     except Exception as err:
@@ -369,6 +374,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    print(os.path.abspath('..'))
+    main()
     # pass

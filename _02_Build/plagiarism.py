@@ -1,3 +1,8 @@
+"""
+    This python module contains function definition which is specific to
+    plagiarism check
+"""
+
 from __future__ import print_function
 import os
 

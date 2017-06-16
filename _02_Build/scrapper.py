@@ -1,3 +1,7 @@
+"""
+Function definitions for scrapping the files from the server location are contained in this module.
+"""
+
 from __future__ import print_function
 import requests
 import easygui
@@ -7,6 +11,14 @@ from bs4 import BeautifulSoup
 
 
 def move_file(filename, test_taker, task_folder, dest_fldr_root):
+    """Moves a file from one locaion to another
+
+    :param filename: file to be moved
+    :param test_taker: name of the test taker
+    :param task_folder: name of the task folder under test taker folder
+    :param dest_fldr_root: root path
+    :return: None
+    """
     shutil.move(os.path.join(os.getcwd(), filename),
                 os.path.join(dest_fldr_root, test_taker, task_folder, filename))
 
