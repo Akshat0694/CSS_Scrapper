@@ -1,4 +1,9 @@
 """
+    @author: Akshat Tandon
+"""
+
+
+"""
 For this application to run it is necessary the the below information is filled as described.
 The names of the students appearing for the exam should be put in a txt file which should be chosen
 in the file dialog box once the script is run. The txt file with test takers' usernames can be placed anywhere.

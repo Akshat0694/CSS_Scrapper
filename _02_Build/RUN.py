@@ -1,4 +1,8 @@
 """
+    @author: Akshat Tandon
+"""
+
+"""
     This is the module containing the main logic for Testructor.
     From file downloading to plagiarism check, all takes places in here.
 """
